@@ -1,3 +1,6 @@
+-- Имеющаяся у нас схема не очень годится для работы. Нужно привести её в нормальный вид, таблицы должны выглядеть следующим образом: --
+-- == Таблица _cities == --
+
 ALTER TABLE `geodata`.`_cities` 
 DROP COLUMN `region_cz`,
 DROP COLUMN `area_cz`,
@@ -40,25 +43,31 @@ DROP COLUMN `area_ua`,
 DROP COLUMN `title_ua`,
 DROP COLUMN `region_ru`,
 DROP COLUMN `area_ru`;
-CHANGE COLUMN `city_id` `id` INT NOT NULL AUTO_INCREMENT ,
-ADD PRIMARY KEY (`id`);
-ADD INDEX `fd_countries_cities_idx` (`country_id` ASC) VISIBLE;
+
+ALTER TABLE `geodata`.`_cities` 
+ADD INDEX `fk_countries_cities_idx` (`country_id` ASC) VISIBLE;
+;
 ALTER TABLE `geodata`.`_cities` 
 ADD CONSTRAINT `fk_countries_cities`
   FOREIGN KEY (`country_id`)
   REFERENCES `geodata`.`_countries` (`id`)
   ON DELETE NO ACTION
-  ON UPDATE NO ACTION; 
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `geodata`.`_cities` 
 CHANGE COLUMN `title_ru` `title` VARCHAR(150) NOT NULL ,
-ADD INDEX `INDEX` (`title` ASC) VISIBLE,
-CHANGE COLUMN `region_id` `region_id` INT NOT NULL ,
-ADD INDEX `dk_regions_cities_idx` (`region_id` ASC) VISIBLE,
-ADD CONSTRAINT `fk_countries_cities`
-  FOREIGN KEY (`country_id`)
-  REFERENCES `geodata`.`_countries` (`id`),
+ADD INDEX `INDEX` (`title` ASC) VISIBLE;
+;
+
+ALTER TABLE `geodata`.`_cities` 
 CHANGE COLUMN `region_id` `region_id` INT NULL ,
-ADD INDEX `dk_regions_cities_idx` (`region_id` ASC) VISIBLE,
+ADD INDEX `fk_regions_cities_idx` (`region_id` ASC) VISIBLE;
+;
+ALTER TABLE `geodata`.`_cities` 
 ADD CONSTRAINT `fk_regions_cities`
   FOREIGN KEY (`region_id`)
-  REFERENCES `geodata`.`_regions` (`id`);
- 
+  REFERENCES `geodata`.`_regions` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
