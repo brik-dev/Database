@@ -1,0 +1,72 @@
+MongoDB shell version v4.4.2
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("b46ec649-33ad-4958-abf1-6c408bb367ae") }
+MongoDB server version: 4.4.2
+---
+The server generated these startup warnings when booting:
+        2020-12-22T22:54:29.510+01:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> use users
+switched to db users
+> db.createUser({user:"user1", pwd:"1234",roles:["readWrite","dbAdmin"]})
+Successfully added user: { "user" : "user1", "roles" : [ "readWrite", "dbAdmin" ] }
+> db.users.insert({"name": "Tom", "age": 30, languages: ["english", "spanish"]})
+WriteResult({ "nInserted" : 1 })
+> db.users.find()
+{ "_id" : ObjectId("5fe26fab3853467d69d36846"), "name" : "Tom", "age" : 28, "languages" : [ "english", "spanish" ] }
+{ "_id" : ObjectId("5fe26fe23853467d69d36847"), "company" : { "name" : "Microsoft", "age" : 25, "languages" : [ "english", "spanish" ] } }
+{ "_id" : ObjectId("5fe2727f41c6193210fbdf9d"), "name" : "Tom", "age" : 30, "languages" : [ "english", "spanish" ] }
+> db.users.insert({"company":{"name":"Microsoft","age": 25, languages: ["english", "spanish"]}})
+WriteResult({ "nInserted" : 1 })
+> db.users.find({"company.name": "Microsoft"})
+{ "_id" : ObjectId("5fe26fe23853467d69d36847"), "company" : { "name" : "Microsoft", "age" : 25, "languages" : [ "english", "spanish" ] } }
+{ "_id" : ObjectId("5fe2729441c6193210fbdf9e"), "company" : { "name" : "Microsoft", "age" : 25, "languages" : [ "english", "spanish" ] } }
+> db.users.find ({age: {$lt : 30}})
+{ "_id" : ObjectId("5fe26fab3853467d69d36846"), "name" : "Tom", "age" : 28, "languages" : [ "english", "spanish" ] }
+> db.users.find ({age: {$gt : "30"}})
+> db.users.find ({age: {$gt : 30, $lt: 50}})
+> db.users.find ({age: {$gt : "30"}}),
+... db.users.find ({age: {$gt : 30, $lt: 50}})
+> db.users.find ({age: {$ne : 22}})
+{ "_id" : ObjectId("5fe26fab3853467d69d36846"), "name" : "Tom", "age" : 28, "languages" : [ "english", "spanish" ] }
+{ "_id" : ObjectId("5fe26fe23853467d69d36847"), "company" : { "name" : "Microsoft", "age" : 25, "languages" : [ "english", "spanish" ] } }
+{ "_id" : ObjectId("5fe2727f41c6193210fbdf9d"), "name" : "Tom", "age" : 30, "languages" : [ "english", "spanish" ] }
+{ "_id" : ObjectId("5fe2729441c6193210fbdf9e"), "company" : { "name" : "Microsoft", "age" : 25, "languages" : [ "english", "spanish" ] } }
+> db.users.find ({age: {$in : [22, 32]}})
+> db.users.find ({age: {$nin : [22, 32]}})
+{ "_id" : ObjectId("5fe26fab3853467d69d36846"), "name" : "Tom", "age" : 28, "languages" : [ "english", "spanish" ] }
+{ "_id" : ObjectId("5fe26fe23853467d69d36847"), "company" : { "name" : "Microsoft", "age" : 25, "languages" : [ "english", "spanish" ] } }
+{ "_id" : ObjectId("5fe2727f41c6193210fbdf9d"), "name" : "Tom", "age" : 30, "languages" : [ "english", "spanish" ] }
+{ "_id" : ObjectId("5fe2729441c6193210fbdf9e"), "company" : { "name" : "Microsoft", "age" : 25, "languages" : [ "english", "spanish" ] } }
+> db.users.find ({languages: {$all : [ "english" ,   "spanish" ]}})
+{ "_id" : ObjectId("5fe26fab3853467d69d36846"), "name" : "Tom", "age" : 28, "languages" : [ "english", "spanish" ] }
+{ "_id" : ObjectId("5fe2727f41c6193210fbdf9d"), "name" : "Tom", "age" : 30, "languages" : [ "english", "spanish" ] }
+> db.users.find ({$or : [{name: "Tom"}, {age: 22}]})
+{ "_id" : ObjectId("5fe26fab3853467d69d36846"), "name" : "Tom", "age" : 28, "languages" : [ "english", "spanish" ] }
+{ "_id" : ObjectId("5fe2727f41c6193210fbdf9d"), "name" : "Tom", "age" : 30, "languages" : [ "english", "spanish" ] }
+> db.users.find ({languages: {$size:2}})
+{ "_id" : ObjectId("5fe26fab3853467d69d36846"), "name" : "Tom", "age" : 28, "languages" : [ "english", "spanish" ] }
+{ "_id" : ObjectId("5fe2727f41c6193210fbdf9d"), "name" : "Tom", "age" : 30, "languages" : [ "english", "spanish" ] }
+> db.users.find ({company: {$exists:true}})
+{ "_id" : ObjectId("5fe26fe23853467d69d36847"), "company" : { "name" : "Microsoft", "age" : 25, "languages" : [ "english", "spanish" ] } }
+{ "_id" : ObjectId("5fe2729441c6193210fbdf9e"), "company" : { "name" : "Microsoft", "age" : 25, "languages" : [ "english", "spanish" ] } }
+> db.users.find ({name: {$regex:"b"}})
+> db.users.save({name: "Eugene", age : 29, languages: ["english", "german", "spanish"]})
+WriteResult({ "nInserted" : 1 })
+> db.users.update({name : "Eugene", age: 29}, {$set: {age : 30}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.users.update({name : "Tom"}, {$unset: {salary: 1}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 0 })
+> db.users.update({name : "Tom"}, {$unset: {salary: 1, age: 1}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
