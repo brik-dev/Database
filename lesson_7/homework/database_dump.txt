@@ -1,0 +1,22 @@
+C:\Program Files\MySQL\MySQL Server 8.0\bin>mysqldump -u root -p employees > full_employees.sql
+Enter password: ****************
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>dir
+ Volume in drive C is Windows
+ Volume Serial Number is 1459-5DD8
+
+ Directory of C:\Program Files\MySQL\MySQL Server 8.0\bin
+
+27/12/2020  22:06    <DIR>          .
+27/12/2020  22:06    <DIR>          ..
+27/12/2020  22:06       168.377.578 full_employees.sql
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>dir
+ Volume in drive C is Windows
+ Volume Serial Number is 1459-5DD8
+
+ Directory of C:\Program Files\MySQL\MySQL Server 8.0\bin
+
+27/12/2020  22:06    <DIR>          .
+27/12/2020  22:06    <DIR>          ..
+27/12/2020  22:06       168.377.578 full_employees.sql
